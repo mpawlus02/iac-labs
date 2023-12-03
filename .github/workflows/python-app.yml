@@ -14,10 +14,13 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./example-app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -37,10 +40,13 @@ jobs:
         key: ${{ runner.os }}-venv
   lint:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./example-app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]     
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -61,10 +67,13 @@ jobs:
       
   formatter:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./example-app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]     
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -85,10 +94,13 @@ jobs:
 
   security:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./example-app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -109,10 +121,13 @@ jobs:
 
   pytest:  
     needs: [lint, security, formatter]  
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     defaults:
       run:
         working-directory: ./example-app
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -130,4 +145,5 @@ jobs:
     - name: security
       run: |
         poetry run task test      
-        
+
+ 
