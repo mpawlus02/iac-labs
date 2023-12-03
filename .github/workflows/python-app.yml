@@ -14,7 +14,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,7 +36,7 @@ jobs:
         path: /home/runner/.cache/pypoetry/virtualenvs
         key: ${{ runner.os }}-venv
   lint:
-
+    needs: build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -61,6 +60,7 @@ jobs:
         poetry run task lint
       
   formatter:
+    needs: build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -82,8 +82,9 @@ jobs:
     - name: formatter
       run: |
         poetry run task formatter
-    needs: lint
+
   security:
+    needs: build
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -105,8 +106,9 @@ jobs:
     - name: security
       run: |
         poetry run task security
-    needs: [lint, formatter]    
+
   pytest:  
+    needs: [lint, security, formatter]  
     runs-on: ubuntu-latest
     defaults:
       run:
